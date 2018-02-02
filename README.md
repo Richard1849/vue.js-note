@@ -55,17 +55,18 @@ Vue.js 的核心是一个允许采用简洁的模板语法来声明式地将数�
     var app3 = new Vue({
       el: '#app-3',
       data: {
-h        seen: true
+      seen: true
       }
     })
 
 继续在控制台输入 app3.seen = false，你会发现之前显示的消息消失了。
 这个例子演示了我们不仅可以把数据绑定到 DOM 文本或特性，还可以绑定到 DOM 结构。此外，Vue 也提供一个强大的过渡效果系统，可以在 Vue 插入/更新/移除元素时自动应用过渡效果。
 还有其它很多指令，每个都有特殊的功能。例如，v-for 指令可以绑定数组的数据来渲染一个项目列表：
+
     <div id="app-4">
       <ol>
         <li v-for="todo in todos">
-j          {{ todo.text }}
+          {{ todo.text }}
         </li>
       </ol>
     </div>
@@ -75,7 +76,8 @@ j          {{ todo.text }}
         todos: [
           { text: '学习 JavaScript' },
           { text: '学习 Vue' },          { text: '整个牛项目' }
-        ]      }
+        ]      
+        }
 
     })
 ## **处理用户输入**
