@@ -933,7 +933,7 @@ vm.$set(vm.userProfile, 'age', 27)
     },
     computed: {
       evenNumbers: function () {
-        return this.numbers.filter(function (number) {
+         return this.numbers.filter(function (number) {
           return number % 2 === 0
         })
       }
@@ -964,7 +964,7 @@ v-for 也可以取整数。在这种情况下，它将重复多次模板。
 1 2 3 4 5 6 7 8 9 10 
 
 
-##v-for on a <template>
+## v-for on a <template>
 类似于 v-if，你也可以利用带有 v-for 的 <template> 渲染多个元素。比如：
 
     <ul>
@@ -974,7 +974,7 @@ v-for 也可以取整数。在这种情况下，它将重复多次模板。
       </template>
     </ul>
 
-##v-for with v-if
+## v-for with v-if
 当它们处于同一节点，v-for 的优先级比 v-if 更高，这意味着 v-if 将分别重复运行于每个 v-for 循环中。当你想为仅有的一些项渲染节点时，这种优先级的机制会十分有用，如下：
 
     <li v-for="todo in todos" v-if="!todo.isComplete">
