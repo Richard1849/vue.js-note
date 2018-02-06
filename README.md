@@ -964,7 +964,7 @@ v-for 也可以取整数。在这种情况下，它将重复多次模板。
 1 2 3 4 5 6 7 8 9 10 
 
 
-## v-for on a <template>
+## v-for on a template
 类似于 v-if，你也可以利用带有 v-for 的 <template> 渲染多个元素。比如：
 
     <ul>
