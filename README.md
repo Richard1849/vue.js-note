@@ -740,7 +740,8 @@ v-else 元素必须紧跟在带 v-if 或者 v-else-if 的元素的后面，否�
 v-else-if，顾名思义，充当 v-if 的“else-if 块”，可以连续使用：
 
     <div v-if="type === 'A'">
-      A
+
+A
     </div>
     <div v-else-if="type === 'B'">
       B
@@ -796,3 +797,273 @@ v-if 也是惰性的：如果在初始渲染时条件为假，则什么也不做
 一般来说，v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好。
 v-if 与 v-for 一起使用
 当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级。
+
+
+## **列表渲染
+用 v-for 把一个数组对应为一组元素
+我们用 v-for 指令根据一组数组的选项列表进行渲染。v-for 指令需要使用 item in items 形式的特殊语法，items 是源数据数组并且 item 是数组元素迭代的别名。
+
+    <ul id="example-1">
+      <li v-for="item in items">
+        {{ item.message }}
+      </li>
+    </ul>
+    var example1 = new Vue({
+      el: '#example-1',
+      data: {
+        items: [
+          { message: 'Foo' },
+          { message: 'Bar' }
+        ]
+      }
+    })
+
+在 v-for 块中，我们拥有对父作用域属性的完全访问权限。v-for 还支持一个可选的第二个参数为当前项的索引。
+
+    <ul id="example-2">
+      <li v-for="(item, index) in items">
+        {{ parentMessage }} - {{ index }} - {{ item.message }}
+      </li>
+    </ul>
+    var example2 = new Vue({
+      el: '#example-2',
+      data: {
+        parentMessage: 'Parent',
+        items: [
+          { message: 'Foo' },
+          { message: 'Bar' }
+        ]
+      }
+    })
+
+## 一个对象的 v-for
+你也可以用 v-for 通过一个对象的属性来迭代。
+
+    <ul id="v-for-object" class="demo">
+      <li v-for="value in object">
+        {{ value }}
+      </li>
+    </ul>
+    new Vue({
+      el: '#v-for-object',
+      data: {
+        object: {
+          firstName: 'John',
+          lastName: 'Doe',
+          age: 30
+        }
+      }
+
+    })
+
+
+
+你也可以提供第二个的参数为键名：
+
+    <div v-for="(value, key) in object">
+      {{ key }}: {{ value }}
+    </div>
+
+
+第三个参数为索引：
+
+    <div v-for="(value, key, index) in object">
+      {{ index }}. {{ key }}: {{ value }}
+    </div>
+
+## key
+当 Vue.js 用 v-for 正在更新已渲染过的元素列表时，它默认用“就地复用”策略。如果数据项的顺序被改变，Vue 将不会移动 DOM 元素来匹配数据项的顺序， 而是简单复用此处每个元素，并且确保它在特定索引下显示已被渲染过的每个元素。这个类似 Vue 1.x 的 track-by="$index" 。
+这个默认的模式是高效的，但是只适用于不依赖子组件状态或临时 DOM 状态 (例如：表单输入值) 的列表渲染输出。
+为了给 Vue 一个提示，以便它能跟踪每个节点的身份，从而重用和重新排序现有元素，你需要为每项提供一个唯一 key 属性。理想的 key 值是每项都有的且唯一的 id。这个特殊的属性相当于 Vue 1.x 的 track-by ，但它的工作方式类似于一个属性，所以你需要用 v-bind 来绑定动态值 (在这里使用简写)：
+
+    <div v-for="item in items" :key="item.id">
+      <!-- 内容 -->
+    </div>
+
+建议尽可能在使用 v-for 时提供 key，除非遍历输出的 DOM 内容非常简单，或者是刻意依赖默认行为以获取性能上的提升。
+因为它是 Vue 识别节点的一个通用机制，key 并不与 v-for 特别关联，key 还具有其他用途，我们将在后面的指南中看到其他用途。
+
+
+## 对象更改检测注意事项
+还是由于 JavaScript 的限制，Vue 不能检测对象属性的添加或删除：
+
+    var vm = new Vue({
+      data: {
+        a: 1
+      }
+    })
+    // `vm.a` 现在是响应式的
+    
+    vm.b = 2
+    // `vm.b` 不是响应式的
+
+对于已经创建的实例，Vue 不能动态添加根级别的响应式属性。但是，可以使用 Vue.set(object, key, value) 方法向嵌套对象添加响应式属性。例如，对于：
+
+    var vm = new Vue({
+      data: {
+        userProfile: {
+          name: 'Anika'
+        }
+      }
+    })
+
+你可以添加一个新的 age 属性到嵌套的 userProfile 对象：
+Vue.set(vm.userProfile, 'age', 27)
+你还可以使用 vm.$set 实例方法，它只是全局 Vue.set 的别名：
+vm.$set(vm.userProfile, 'age', 27)
+有时你可能需要为已有对象赋予多个新属性，比如使用 Object.assign() 或 _.extend()。在这种情况下，你应该用两个对象的属性创建一个新的对象。所以，如果你想添加新的响应式属性，不要像这样：
+
+    Object.assign(vm.userProfile, {
+      age: 27,
+      favoriteColor: 'Vue Green'
+    })
+    你应该这样做：
+    vm.userProfile = Object.assign({}, vm.userProfile, {
+      age: 27,
+      favoriteColor: 'Vue Green'
+    })
+
+显示过滤/排序结果
+有时，我们想要显示一个数组的过滤或排序副本，而不实际改变或重置原始数据。在这种情况下，可以创建返回过滤或排序数组的计算属性。
+例如：
+
+    <li v-for="n in evenNumbers">{{ n }}</li>
+    data: {
+      numbers: [ 1, 2, 3, 4, 5 ]
+    },
+    computed: {
+      evenNumbers: function () {
+        return this.numbers.filter(function (number) {
+          return number % 2 === 0
+        })
+      }
+    }
+
+在计算属性不适用的情况下 (例如，在嵌套 v-for 循环中) 你可以使用一个 method 方法：
+
+    <li v-for="n in even(numbers)">{{ n }}</li>
+    data: {
+      numbers: [ 1, 2, 3, 4, 5 ]
+    },
+    methods: {
+      even: function (numbers) {
+        return numbers.filter(function (number) {
+          return number % 2 === 0
+        })
+      }
+    }
+
+一段取值范围的 v-for
+v-for 也可以取整数。在这种情况下，它将重复多次模板。
+
+    <div>
+      <span v-for="n in 10">{{ n }} </span>
+    </div>
+
+结果：
+1 2 3 4 5 6 7 8 9 10 
+
+
+##v-for on a <template>
+类似于 v-if，你也可以利用带有 v-for 的 <template> 渲染多个元素。比如：
+
+    <ul>
+      <template v-for="item in items">
+        <li>{{ item.msg }}</li>
+        <li class="divider"></li>
+      </template>
+    </ul>
+
+##v-for with v-if
+当它们处于同一节点，v-for 的优先级比 v-if 更高，这意味着 v-if 将分别重复运行于每个 v-for 循环中。当你想为仅有的一些项渲染节点时，这种优先级的机制会十分有用，如下：
+
+    <li v-for="todo in todos" v-if="!todo.isComplete">
+      {{ todo }}
+    </li>
+
+上面的代码只传递了未完成的 todos。
+而如果你的目的是有条件地跳过循环的执行，那么可以将 v-if 置于外层元素 (或 <template>)上。如：
+
+    <ul v-if="todos.length">
+      <li v-for="todo in todos">
+        {{ todo }}
+      </li>
+    </ul>
+    <p v-else>No todos left!</p>
+
+## 一个组件的 v-for
+了解组件相关知识，查看 组件。完全可以先跳过它，以后再回来查看。
+在自定义组件里，你可以像任何普通元素一样用 v-for 。
+<my-component v-for="item in items" :key="item.id"></my-component>
+2.2.0+ 的版本里，当在组件中使用 v-for 时，key 现在是必须的。
+然而，任何数据都不会被自动传递到组件里，因为组件有自己独立的作用域。为了把迭代数据传递到组件里，我们要用 props ：
+
+    <my-component
+      v-for="(item, index) in items"
+      v-bind:item="item"
+      v-bind:index="index"
+      v-bind:key="item.id"
+    ></my-component>
+
+不自动将 item 注入到组件里的原因是，这会使得组件与 v-for 的运作紧密耦合。明确组件数据的来源能够使组件在其他场合重复使用。
+下面是一个简单的 todo list 的完整例子：
+
+    <div id="todo-list-example">
+      <input
+        v-model="newTodoText"
+        v-on:keyup.enter="addNewTodo"
+        placeholder="Add a todo"
+      >
+      <ul>
+        <li
+          is="todo-item"
+          v-for="(todo, index) in todos"
+          v-bind:key="todo.id"
+          v-bind:title="todo.title"
+          v-on:remove="todos.splice(index, 1)"
+        ></li>
+      </ul>
+    </div>
+
+注意这里的 is="todo-item" 属性。这种做法在使用 DOM 模板时是十分必要的，因为在 <ul> 元素内只有 <li> 元素会被看作有效内容。这样做实现的效果与 <todo-item> 相同，但是可以避开一些潜在的浏览器解析错误。查看 DOM 模板解析说明 来了解更多信息。
+
+    Vue.component('todo-item', {
+      template: '\
+        <li>\
+          {{ title }}\
+          <button v-on:click="$emit(\'remove\')">X</button>\
+        </li>\
+      ',
+      props: ['title']
+    })
+    
+    new Vue({
+      el: '#todo-list-example',
+      data: {
+        newTodoText: '',
+        todos: [
+          {
+            id: 1,
+            title: 'Do the dishes',
+          },
+          {
+            id: 2,
+            title: 'Take out the trash',
+          },
+          {
+            id: 3,
+            title: 'Mow the lawn'
+          }
+        ],
+        nextTodoId: 4
+      },
+      methods: {
+        addNewTodo: function () {
+          this.todos.push({
+            id: this.nextTodoId++,
+            title: this.newTodoText
+          })
+          this.newTodoText = ''
+        }
+      }
+    })
