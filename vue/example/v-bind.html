@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../assets/js/vue.min.js"></script>
+</head>
+<style>
+    .classA{
+         color: red;
+    }
+    .classB{
+        font-size: 20px;
+    }
+</style>
+<body>
+    <h1>v-bind</h1>
+    <hr>
+    <div id="app">
+        <p><img v-bind:src="imgSrc" alt=""></p> <!-- 绑定图片url地址 -->
+        <p><a :href="url1">hello world</a></p> <!-- 绑定url地址，v-bind的缩写方法":" -->
+        <hr>
+        <div :class="classname" >1.绑定class</div>
+        <div :class="{classA:isok}" >2.绑定class的判断</div>
+        <div :class="[classA,classB]" >3.绑定class的数组</div>
+        <div :class="isok?classA:classB" >4.绑定class的三元运算符</div><!-- 如果isok是true的时候为classA，false的时候是classB -->
+        
+        <hr>
+        <input type="checkbox" id="choose" v-model="isok"><!-- 绑定isok来判断是true还是false从而影响上面绑定判断isok的class -->
+        <label for="choose">选择是:{{isok}}</label>
+        <hr>
+        <div :style="{color:red,fontSize:font}" >5.绑定style</div><!-- 不能用font-size要用fontSize -->
+        <hr>
+        <div :style="styleObject">6:绑定一个style对象</div>
+    </div>
+</body>
+<script>
+    var app=new Vue({
+         el:"#app",
+         data:{
+             imgSrc:"https://ss0.baidu.com/73F1bjeh1BF3odCf/it/u=2657894004,594591804&fm=85&s=CDA630724343734D0EE058E503007062",
+             url1:"https://www.baidu.com/link?url=311mAv26LKPkRo3ztgJahGM58jgUgY6ub3wbswkDOdC&wd=&eqid=dc4458dd0001f937000000065a7d4183",
+             classname:"classA",
+             isok:false,
+             classA:"classA",
+             classB:"classB",
+             red:"red",
+             font:"20px",
+             styleObject:{
+                 color:"blue",
+                 fontSize:"20px"
+
+             }
+         }
+    })
+</script>
+</html>

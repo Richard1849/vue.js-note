@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../assets/js/vue.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>v-for</h1>
+        <div>
+            <ul>
+                <hr>
+                <li v-for="item in sortitems">
+                    {{item}}
+                </li>
+                <hr>
+                <li v-for="(student,index) in students">
+                    {{index+1}}:{{student.name}}-{{student.age}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script>
+    var app=new Vue({
+         el:"#app",
+         data:{
+            items:[30,10,40,26,18,60],
+            students:[
+                {name:"jb",age:30},
+                {name:"js",age:40},
+                {name:"ji",age:16},
+                {name:"ol",age:17}
+            ]
+         },
+         computed:{
+              sortitems: function () {
+                  return this.items.sort(sortNumber);
+              }
+         }
+    });
+    function sortNumber(a,b) {
+        return a-b;
+        
+    }
+</script>
+</html>

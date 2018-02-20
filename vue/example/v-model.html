@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../assets/js/vue.min.js"></script>
+</head>
+<body>
+    <h1>v-model</h1>
+    <hr>
+    <div id="app">
+        <p>{{message}}</p>
+        <p>v-model: <input type="text" v-model="message"></p>
+        <p>v-model.lazy: <input type="text" v-model.lazy="message"></p> <!-- 懒加载 -->
+        <p>v-model.number: <input type="text" v-model.number="message"></p><!--  只能输入数字 -->
+        <p>v-model.trim: <input type="text" v-model.trim="message"></p><!-- 限制空格 -->
+
+        <hr>
+        <h1>绑定一个数据</h1>
+         <input type="checkbox" id="true"  v-model="istrue">
+         <label for="true">选择{{istrue}}</label>
+         <hr>
+         <h1>绑定一个数组</h1>
+         <input type="checkbox" id="one" value="first"  v-model="boxarray">
+         <label for="one">选择一</label>
+         <input type="checkbox" id="two" value="second"  v-model="boxarray">
+         <label for="two">选择二</label>
+         <input type="checkbox" id="three" value="third"  v-model="boxarray">
+         <label for="three">选择三</label>
+         
+         <p>{{boxarray}}</p>
+         <h1>单选框绑定</h1>
+         <hr>
+         <input type="radio" id="man" value="男" v-model="sex">
+         <label for="man">男</label>
+         <input type="radio" id="girls" value="女" v-model="sex">
+         <label for="girls">女</label>
+         <p>您的选择是：{{sex}}</p>
+    </div>
+</body>
+<script>
+    var app=new Vue({
+         el:"#app",
+         data:{
+             message:"hello,world",
+             istrue:true,
+             boxarray:[],
+             sex:"男"
+         }
+    })
+</script>
+</html>

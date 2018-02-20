@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../assets/js/vue.min.js"></script>
+</head>
+<body>
+    <h1>v-on</h1>
+    <hr>
+    <div id="app">
+      <p>{{fenshu}}</p>
+        <button v-on:click="jiafen">加分</button>
+        <button v-on:click="jianfen">减分</button>
+        <input type="text" v-on:keyup.enter="Enter" v-model="fenshu2">
+    </div>
+</body>
+<script>
+    var app=new Vue({
+         el:"#app",
+         data:{
+             fenshu:0,
+             fenshu2:1
+         },
+         methods:{
+             jiafen:function(){
+                 this.fenshu++
+             },
+             jianfen:function(){
+                 this.fenshu--
+             },
+             Enter:function(){
+                 this.fenshu=this.fenshu+parseInt(this.fenshu2)//通过输入的数值相加，更新fenshu，parseInt的作用是把fenshu2转化为整型，不然会出现字符串相加的情况
+             }
+         }
+    })
+</script>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../assets/js/vue.min.js"></script>
+</head>
+<body>
+    <h1>v-pre & v-cloak & v-once</h1>
+    <hr>
+    <div id="app">
+        <div v-pre>{{message}}</div><!-- 为了把两个花括号显示出来，不会处理插值 -->
+        <hr>
+        <div v-cloak>渲染完成后才会显示</div>
+        <hr>
+        <p v-once>{{message}}</p><!-- 只会双向绑定下面那个插值 -->
+        <div><input type="text" v-model="message"></div>
+        <p>{{message}}</p>
+    </div>
+</body>
+<script>
+    var app=new Vue({
+         el:"#app",
+         data:{
+             message:"hello,world"
+         }
+    })
+</script>
+</html>
